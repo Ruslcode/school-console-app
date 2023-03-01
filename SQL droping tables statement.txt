@@ -1,0 +1,4 @@
+drop table students_groups;
+drop table students;
+drop table courses;
+drop table students_courses_groups;
