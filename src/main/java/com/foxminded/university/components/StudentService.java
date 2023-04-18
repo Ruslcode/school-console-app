@@ -15,15 +15,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
+    private String ERROR_MASSAGE_ADD_COURSE = "Could not add course to student!\n " + "Check student & course existing or course all ready exist";
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
     private AssignmentRepository assignmentRepository;
-
-    private String ERROR_MASSAGE_ADD_COURSE = "Could not add course to student!\n " + "Check student & course existing or course all ready exist";
-
 
     @Transactional
     public void deleteStudentById(int studentID) {
@@ -33,8 +31,6 @@ public class StudentService {
 
     @Transactional
     public List<Course> addCourse(int studentId, int courseId) throws SQLException {
-
-
         var student = studentRepository.findByID(studentId);
         var course = courseRepository.findByIndex(courseId);
         var assignmentCourses = assignmentRepository.findByStudentID(studentId);

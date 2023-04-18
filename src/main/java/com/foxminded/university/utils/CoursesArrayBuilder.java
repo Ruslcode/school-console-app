@@ -1,6 +1,5 @@
 package com.foxminded.university.utils;
 
-import
 public class CoursesArrayBuilder {
 
     public String[] getCourses() {

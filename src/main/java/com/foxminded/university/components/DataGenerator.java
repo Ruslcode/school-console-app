@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,18 +16,18 @@ import java.util.List;
 
 @Component
 public class DataGenerator {
-    private int studentLimit = 200;
-    private NameGenerator studentNames = new NameGenerator(studentLimit);
-    private GroupNameGenerator groupNames = new GroupNameGenerator();
-    private final String[] STUDENTS = studentNames.getNames();
-    public final String[] GROUPS = groupNames.getGroupNames();
-    private final String[] COURSES = new CoursesArrayBuilder().getCourses();
     private static String INSERTING_INTO_STUDENTS = "INSERT INTO students(student_id, first_name, last_name) values (?,?,?)";
     private static String INSERTING_INTO_STUDENTS_GROUPS = "INSERT INTO university_groups(group_id, group_name) " + "VALUES(?,?)";
     private static String INSERTING_INTO_COURSES = "INSERT INTO courses(course_id, course_name, course_description) " +
             "VALUES(?,?,?)";
     private static String INSERTING_INTO_STUDENT_ASSIGNMENTATION = "INSERT INTO course_assignment(assignment_id ,student_id, course_id, group_id )" +
             "VALUES(?,?,?,?)";
+    private int studentLimit = 200;
+    private NameGenerator studentNames = new NameGenerator(studentLimit);
+    private GroupNameGenerator groupNames = new GroupNameGenerator();
+    private final String[] STUDENTS = studentNames.getNames();
+    public final String[] GROUPS = groupNames.getGroupNames();
+    private final String[] COURSES = new CoursesArrayBuilder().getCourses();
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

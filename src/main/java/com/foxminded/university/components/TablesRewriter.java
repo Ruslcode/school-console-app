@@ -5,7 +5,6 @@ import com.foxminded.university.utils.FileReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ public class TablesRewriter {
             createTableAction();
         }
     }
-
 
     private void dropTableAction() {
         try {

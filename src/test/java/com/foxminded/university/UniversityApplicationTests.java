@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ContextConfiguration(classes = UniversityApplication.class)
 class UniversityApplicationTests {
+    private int TEST_ID = 9999;
     @Autowired
     private AssignmentRepository assignmentRepository;
     @Autowired
@@ -34,7 +35,6 @@ class UniversityApplicationTests {
     private StudentRepository studentRepository;
     private Student testStudent = new Student();
     private AssigmentCourse testAssigment = new AssigmentCourse();
-    private int testID = 9999;
     @Autowired
     private EntityManager em;
     @Autowired
@@ -44,7 +44,7 @@ class UniversityApplicationTests {
     public void studentServiceMustDeleteStudentByStudentIDFromAssignmentAndStudents() {
         testStudent.setFirstName("test student");
         testStudent.setLastName("test last name");
-        testStudent.setID(testID);
+        testStudent.setID(TEST_ID);
         testAssigment.setStudentID(testStudent.getID());
         testAssigment.setCourseID(999);
         testAssigment.setGroupID(666);
@@ -52,7 +52,7 @@ class UniversityApplicationTests {
         studentRepository.save(testStudent);
         studentService.deleteStudentById(testStudent.getID());
         Exception exception = Assertions.assertThrows(NoResultException.class,
-                () -> em.createQuery("select s from Student s where s.ID = :studentID", Student.class).setParameter("studentID", testID).getSingleResult());
+                () -> em.createQuery("select s from Student s where s.ID = :studentID", Student.class).setParameter("studentID", TEST_ID).getSingleResult());
         String exceptedErrorMassage = exception.getMessage();
         String actualErrorMassage = "No result found for query [select s from Student s where s.ID = :studentID]";
         Assertions.assertEquals(exceptedErrorMassage, actualErrorMassage);
@@ -62,9 +62,9 @@ class UniversityApplicationTests {
     public void assignmentRepoGettingListOfCoursesByStudentId() {
         var testAssignment = new AssigmentCourse();
         testAssignment.setCourseID(5);
-        testAssignment.setStudentID(testID);
+        testAssignment.setStudentID(TEST_ID);
         assignmentRepository.save(testAssignment);
-        int exceptedLengthOfCourseList = courseRepository.findCoursesByStudentId(testID).size();
+        int exceptedLengthOfCourseList = courseRepository.findCoursesByStudentId(TEST_ID).size();
         int actualLengthOfCourseList = 1;
         assignmentRepository.delete(testAssignment);
         Assertions.assertEquals(exceptedLengthOfCourseList, actualLengthOfCourseList);
