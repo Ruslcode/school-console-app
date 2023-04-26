@@ -2,6 +2,7 @@ package com.foxminded.university.components;
 
 import com.foxminded.university.exceptions.ExceptionConstants;
 import com.foxminded.university.utils.FileReader;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -28,8 +29,7 @@ public class TablesRewriter {
 
     private void dropTableAction() {
         try {
-            List<String> tableDropStatement = new ArrayList<>();
-            tableDropStatement = FileReader.readLines(PATH_TO_DROPPING_STATEMENT);
+            List<String> tableDropStatement = FileReader.readLines(PATH_TO_DROPPING_STATEMENT);
             for (String query : tableDropStatement) {
                 jdbcTemplate.update(query);
             }
@@ -40,8 +40,7 @@ public class TablesRewriter {
 
     private void createTableAction() {
         try {
-            List<String> tableDropStatement = new ArrayList<>();
-            tableDropStatement = FileReader.readLines(PATH_TO_CREATING_STATEMENT);
+            List<String> tableDropStatement = FileReader.readLines(PATH_TO_CREATING_STATEMENT);
             for (String query : tableDropStatement) {
                 jdbcTemplate.update(query);
             }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>university-cms</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1 ><a href="/">Home Page.</a> You are logged as a <span th:text="${accountType}"></span></h1>
+<h3>Welcome to <span th:text="${appName}"></span></h3>
+<h3>Happy to see you again <span th:text="${loginName}"></span></h3>
+<zoom class="zoom-text">
+    <p><a href="/schedule">Get own schedule</a></p>
+    <p><a href="/addStudent">Create new student;</a></p>
+    <p>Add student to the course;</p>
+            <form method="get" action="/classmates">
+            <label for="index">View Student classmates. Enter student index:</label>
+            <input type="text" id="index" name="index">
+            <button type="submit">Search</button> </form>
+    <p><a href="/groups">show students groups;</a></p>
+    <p><a href="/students">Show students</a> </p>
+</zoom>
+</body>
+<script src="/script.js"></script>
+</html>

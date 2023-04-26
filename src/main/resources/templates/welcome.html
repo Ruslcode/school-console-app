@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>university-cms</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Home Page. You are logged by <span th:text="${accountType}"></span></h1>
+<h3>Welcome to <span th:text="${appName}"></span></h3>
+<h3>happy to see you again <span th:text="${loginName}"></span></h3>
+<zoom class="zoom-text">
+    <p>Show schedule;</p>
+</zoom>
+<zoom class="zoom-text">
+    <p>Create new student;</p>
+</zoom>
+<zoom class="zoom-text">
+    <p>Add student to the course;</p>
+</zoom>
+
+<zoom class="zoom-text">
+    <p>show classmates;</p>
+</zoom>
+
+</body>
+<script src="/script.js"></script>
+</html>

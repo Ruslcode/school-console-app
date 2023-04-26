@@ -31,13 +31,16 @@ public class DataGenerator {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private StudentRepository studentRepository;
-
+    @Autowired
+    private TablesRewriter rewriter;
+    
     @PostConstruct
-    public void generate() {
-        insertAssignmentationCourses();
+    public void insertDataIntoTables() {
+        rewriter.createTablespace();
         insertingDataIntoStudents();
-        insertIntoStudentsGroups();
+        insertIntoGroups();
         insertIntoCourses();
+        insertAssignmentationCourses();
     }
 
     public void insertingDataIntoStudents() {
@@ -57,7 +60,7 @@ public class DataGenerator {
     }
 
 
-    private void insertIntoStudentsGroups() {
+    private void insertIntoGroups() {
         int index = 0;
         for (String groupName : GROUPS) {
             jdbcTemplate.update(INSERTING_INTO_STUDENTS_GROUPS, index, groupName, 0);
@@ -77,21 +80,29 @@ public class DataGenerator {
     }
 
     private void insertAssignmentationCourses() {
+        List<Student> students = studentRepository.findAll();
+        System.out.println(students.size());
 
         int coursePigmentationLimit = 600;
-        int courseRandomId;
         int groupRandomId = 0;
         int studentCoursePigmentation = 0;
         int studentCoursePigmentationLimit = 3;
         int assignmentID = 0;
+        int studentsIndexLimit = 199;
+        int courseRandomId = 0;
 
-        for (int i = coursePigmentationLimit, studentId = 0;
-             i != 0 && studentId <= STUDENTS.length; ) {
+        for (int i = coursePigmentationLimit, listIndex = 0;
+             i != 0 &&  listIndex <= studentsIndexLimit;) {
+            int studentID = students.get(listIndex).getID();
 
-            courseRandomId = (int) (Math.random() * COURSES.length);
+
+            courseRandomId++;
+            if (courseRandomId == COURSES.length){
+                courseRandomId=0;
+            }
 
             jdbcTemplate.update(INSERTING_INTO_STUDENT_ASSIGNMENTATION,
-                    assignmentID, studentId, courseRandomId, groupRandomId);
+                    assignmentID, studentID, courseRandomId, groupRandomId);
 
             assignmentID++;
             studentCoursePigmentation++;
@@ -99,7 +110,7 @@ public class DataGenerator {
             if (studentCoursePigmentation == studentCoursePigmentationLimit) {
                 groupRandomId = (int) (Math.random() * GROUPS.length);
                 studentCoursePigmentation = 0;
-                studentId++;
+                listIndex++;
                 i--;
             }
         }

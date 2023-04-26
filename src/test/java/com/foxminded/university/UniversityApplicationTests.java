@@ -9,6 +9,7 @@ import com.foxminded.university.repositories.AssignmentRepository;
 import com.foxminded.university.repositories.CourseRepository;
 import com.foxminded.university.repositories.GroupRepository;
 import com.foxminded.university.repositories.StudentRepository;
+import com.foxminded.university.utils.GroupNameGenerator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.List;
 
 @SpringBootTest
 @EnableTransactionManagement
@@ -37,9 +40,6 @@ class UniversityApplicationTests {
     private AssigmentCourse testAssigment = new AssigmentCourse();
     @Autowired
     private EntityManager em;
-    @Autowired
-    private DataGenerator dataGenerator;
-
     @Test
     public void studentServiceMustDeleteStudentByStudentIDFromAssignmentAndStudents() {
         testStudent.setFirstName("test student");
@@ -72,9 +72,13 @@ class UniversityApplicationTests {
 
     @Test
     public void studentServiceAddStudentToTheCourse() {
-        var existingStudent = studentRepository.findByID(1);
+        List<Student> students = studentRepository.findAll();
+        Student checkStudentAssignment = students.get(0);
+        System.out.println(checkStudentAssignment.getID());
+        int studentID = checkStudentAssignment.getID();
+        var existingStudent = studentRepository.findByID(studentID);
         if (existingStudent.isPresent()) {
-            int exceptedCourseQuantity = courseRepository.findCoursesByStudentId(existingStudent.get().getID()).size();
+            int exceptedCourseQuantity = courseRepository.findCoursesByStudentId(studentID).size();
             int actualCourseQuantity = 3;
             Assertions.assertEquals(exceptedCourseQuantity, actualCourseQuantity);
         } else {
@@ -85,7 +89,8 @@ class UniversityApplicationTests {
     @Test
     public void groupRepoCreateTestGroupWithZeroStudentQuantity() {
         int exceptedGroupsQuantity = groupRepository.findWithEqualOrLessStudents(1000).size();
-        int actualGroupQuantity = dataGenerator.GROUPS.length;
+        GroupNameGenerator groupNameGenerator = new GroupNameGenerator();
+        int actualGroupQuantity = groupNameGenerator.getGroupNames().length;
         Assertions.assertEquals(exceptedGroupsQuantity, actualGroupQuantity);
     }
 }

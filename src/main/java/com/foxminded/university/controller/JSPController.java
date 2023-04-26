@@ -9,16 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class JSPController {
     @Value("${spring.application.name}")
     private String appName;
-    private String loginName = "Vasya23455";
-    private String accauntType = "Student";
-
+    @Value("${application.username}")
+    private String loginName;
+    @Value("${application.accountType}")
+    private String accauntType;
 
     @GetMapping("/jsp")
     public String homePage(Model model) {
         model.addAttribute("appName", appName);
-        model.addAttribute("loginName",loginName);
-        model.addAttribute("accountType",accauntType);
-        return "homePage";
+        model.addAttribute("loginName", loginName);
+        model.addAttribute("accountType", accauntType);
+        return "welcome";
     }
 
 }

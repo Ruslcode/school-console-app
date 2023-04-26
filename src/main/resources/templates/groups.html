@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+        <html lang="en" xmlns:th="http://www.thymeleaf.org">
+        <head>
+        <title>university-cms</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Groups or go to <a href="/">Home Page.</a></h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Group Name</th>
+        <th>Students in group</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="group : ${groups}">
+        <td th:text="${group.groupID}"></td>
+        <td th:text="${group.groupName}"></td>
+        <td th:text="${group.studentNumber}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

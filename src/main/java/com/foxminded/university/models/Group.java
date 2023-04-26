@@ -1,15 +1,13 @@
 package com.foxminded.university.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "university_groups", schema = "school-console-app")
 public class Group {
     @Id
     @Column(name = "group_id")
+    @GeneratedValue
     private int groupID;
     @Column(name = "group_name")
     private String groupName;
