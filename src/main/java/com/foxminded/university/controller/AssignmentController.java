@@ -19,7 +19,7 @@ public class AssignmentController {
         return "addCourse";
     }
 
-    @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
+    @RequestMapping(value = "/assignmentCourse", method = RequestMethod.POST)
     public String addStudent(@RequestParam int studentID, @RequestParam int groupID, @RequestParam int courseID) {
         AssigmentCourse assigmentCourse = new AssigmentCourse();
         assigmentCourse.setStudentID(studentID);

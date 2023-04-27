@@ -1,73 +1,76 @@
 body {
-    background: linear-gradient(to bottom, #a30000, #3b0000);
-    padding-left: 20px;
-    font-family: Arial, sans-serif;
-    color: #fff;
     margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
 h1 {
-    font-size: 2.5em;
-    margin-top: 1em;
+    margin: 20px 0;
+    text-align: center;
 }
 
-h3 {
-    font-size: 1.5em;
-    margin-top: 0;
-}
-
-p {
-    font-size: 1.2em;
-    margin-top: 0;
-    margin-bottom: 0.5em;
-}
-
-span {
-    font-weight: bold;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #FFFFFF;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-}
-
-a {
-    color: #007BFF;
+h1 a {
+    color: #333;
     text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
-body {
-    background: linear-gradient(to bottom, #000000, #FF0000);
-}
-
-body {
-    background: linear-gradient(to bottom, #5a5a5a, #8c8c8c);
-    padding-left: 20px;
-    font-family: Arial, sans-serif;
-    color: #fff;
-    margin: 0;
-}
-
-h1 {
-    font-size: 2.5em;
-    margin-top: 1em;
-}
-
 h3 {
-    font-size: 1.5em;
-    margin-top: 0;
+    margin: 10px 0;
+    text-align: center;
 }
 
-p {
+.zoom-text {
+    margin: 50px auto;
+    max-width: 600px;
+}
+
+.zoom-text p {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.zoom-text form {
+    margin: 20px auto;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.zoom-text label {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.zoom-text input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-text button {
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.zoom-text button:hover {
+    background-color: #222;
+}
+body {
+    background-color: #f2f2f2;
+}
+
+.zoom-text p {
+    transition: transform 0.3s ease-in-out, font-size 0.3s ease-in-out;
+}
+
+.zoom-text p:hover {
+    transform: scale(1.2);
     font-size: 1.2em;
-    margin-top: 0;
-    margin-bottom: 0.5em;
 }

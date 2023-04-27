@@ -16,11 +16,10 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
-    List<Student> classmates;
 
-    @GetMapping("/addStudent")
+    @GetMapping("/createStudent")
     public String addStudent() {
-        return "addStudent";
+        return "createStudent";
     }
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
