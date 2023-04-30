@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findAllByFirstName(String firstName);
+    
+    Optional<Student> findDistinctByFirstNameAndLastName (String firstName, String  lastName);
 
     @Query(value = "select t.student_id, first_name, last_name, g.group_name from course_assignment t\n" +
             "left join university_groups g on g.group_id = t.group_id\n" +

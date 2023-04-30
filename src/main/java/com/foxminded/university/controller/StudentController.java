@@ -1,5 +1,6 @@
 package com.foxminded.university.controller;
 
+import com.foxminded.university.components.StudentService;
 import com.foxminded.university.models.Student;
 import com.foxminded.university.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private StudentService studentService;
 
     @GetMapping("/createStudent")
     public String addStudent() {
@@ -23,11 +26,8 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
-    public String addStudent(@RequestParam String firstName, @RequestParam String lastName) {
-        Student student = new Student();
-        student.setFirstName(firstName);
-        student.setLastName(lastName);
-        studentRepository.save(student);
+    public String addStudent(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String groupName) {
+        studentService.addStudent(firstName, lastName, groupName);
         return "redirect:/";
     }
 

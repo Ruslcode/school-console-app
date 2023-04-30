@@ -1,9 +1,11 @@
 package com.foxminded.university;
 
+import com.foxminded.university.components.AssignmentService;
 import com.foxminded.university.components.DataGenerator;
 import com.foxminded.university.components.StudentService;
 import com.foxminded.university.exceptions.StudentNotFoundException;
 import com.foxminded.university.models.AssigmentCourse;
+import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Student;
 import com.foxminded.university.repositories.AssignmentRepository;
 import com.foxminded.university.repositories.CourseRepository;
@@ -20,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @EnableTransactionManagement
@@ -85,6 +88,19 @@ class UniversityApplicationTests {
             throw new StudentNotFoundException("Student not found");
         }
     }
+    @Test
+    public void createNewStudentServiceStudentCreateBreakMassage () {
+        var varStudent = studentRepository.findByID(1);
+        if (varStudent.isPresent()) {
+            Student student = varStudent.get();
+            String exceptedMassage = studentService.addStudent(student.getFirstName(), student.getLastName(), student.getGroupName());
+            String actualMassage = student+" all ready exist!";
+            Assertions.assertEquals(exceptedMassage,actualMassage);
+        } else {
+          throw new StudentNotFoundException("Student not Found!");
+        }
+        
+    }
 
     @Test
     public void groupRepoCreateTestGroupWithZeroStudentQuantity() {
@@ -92,5 +108,13 @@ class UniversityApplicationTests {
         GroupNameGenerator groupNameGenerator = new GroupNameGenerator();
         int actualGroupQuantity = groupNameGenerator.getGroupNames().length;
         Assertions.assertEquals(exceptedGroupsQuantity, actualGroupQuantity);
+    }
+    @Test
+    public void findGroupByID () {
+        int studentID = 1;
+        var group = groupRepository.findGroupByStudentID(studentID);
+        String exceptedGroupNameQueryResult = group.get().getGroupName();
+        String actualGroupNameQueryResult = groupRepository.findAll().get(0).getGroupName();
+        Assertions.assertEquals(exceptedGroupNameQueryResult,actualGroupNameQueryResult);
     }
 }

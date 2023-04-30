@@ -13,9 +13,19 @@ public class Student {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    @Column(name = "group_name")
+    private String groupName;
 
     public int getID() {
         return ID;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public void setID(int ID) {

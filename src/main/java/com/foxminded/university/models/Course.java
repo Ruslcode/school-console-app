@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class Course {
     @Id
     @Column(name = "course_id")
+    @GeneratedValue
     private int index;
     @Column(name = "course_name")
     private String courseName;

@@ -1,7 +1,9 @@
 package com.foxminded.university.controller;
 
-import com.foxminded.university.models.AssigmentCourse;
+import com.foxminded.university.components.AssignmentService;
+import com.foxminded.university.components.StudentService;
 import com.foxminded.university.repositories.AssignmentRepository;
+import com.foxminded.university.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AssignmentController {
     @Autowired
-    private AssignmentRepository assignmentRepository;
+    private StudentService studentService;
 
     @GetMapping("/addCourse")
     public String setAddStudentCourse() {
@@ -20,12 +22,8 @@ public class AssignmentController {
     }
 
     @RequestMapping(value = "/assignmentCourse", method = RequestMethod.POST)
-    public String addStudent(@RequestParam int studentID, @RequestParam int groupID, @RequestParam int courseID) {
-        AssigmentCourse assigmentCourse = new AssigmentCourse();
-        assigmentCourse.setStudentID(studentID);
-        assigmentCourse.setGroupID(groupID);
-        assigmentCourse.setCourseID(courseID);
-        assignmentRepository.save(assigmentCourse);
+    public String addStudent(@RequestParam int studentID, @RequestParam int courseID) {
+        studentService.addCourse(studentID,courseID);
         return "redirect:/";
     }
 }

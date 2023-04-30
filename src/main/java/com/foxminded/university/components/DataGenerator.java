@@ -1,13 +1,18 @@
 package com.foxminded.university.components;
 
+import com.foxminded.university.models.AssigmentCourse;
+import com.foxminded.university.models.Course;
+import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Student;
+import com.foxminded.university.repositories.AssignmentRepository;
+import com.foxminded.university.repositories.CourseRepository;
+import com.foxminded.university.repositories.GroupRepository;
 import com.foxminded.university.repositories.StudentRepository;
 import com.foxminded.university.utils.CoursesArrayBuilder;
 import com.foxminded.university.utils.GroupNameGenerator;
 import com.foxminded.university.utils.NameGenerator;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -28,24 +33,28 @@ public class DataGenerator {
     public final String[] GROUPS = groupNames.getGroupNames();
     private final String[] COURSES = new CoursesArrayBuilder().getCourses();
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
     private StudentRepository studentRepository;
     @Autowired
+    private GroupRepository groupRepository;
+    @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
+    private AssignmentRepository assignmentRepository;
+    @Autowired
     private TablesRewriter rewriter;
-    
+
     @PostConstruct
     public void insertDataIntoTables() {
         rewriter.createTablespace();
         insertingDataIntoStudents();
-        insertIntoGroups();
-        insertIntoCourses();
         insertAssignmentationCourses();
+        insertIntoCourses();
+        insertIntoGroups();
+        assignGroupToStudent();
     }
 
     public void insertingDataIntoStudents() {
         List<Student> students = new ArrayList<>();
-
         for (int i = 0; i < STUDENTS.length; i++) {
             Student tempStudent = new Student();
             int randomStudentIndex = (int) (Math.random() * STUDENTS.length);
@@ -54,64 +63,89 @@ public class DataGenerator {
 
             tempStudent.setFirstName(studentName);
             tempStudent.setLastName(studentLastname);
+            tempStudent.setGroupName("");
             students.add(tempStudent);
         }
         studentRepository.saveAll(students);
+
     }
 
 
     private void insertIntoGroups() {
-        int index = 0;
+        List<Group> groups = new ArrayList<>();
         for (String groupName : GROUPS) {
-            jdbcTemplate.update(INSERTING_INTO_STUDENTS_GROUPS, index, groupName, 0);
-            index++;
+            Group tempGroup = new Group();
+            tempGroup.setGroupName(groupName);
+            groups.add(tempGroup);
         }
-
+        groupRepository.saveAll(groups);
     }
 
     private void insertIntoCourses() {
-        int index = 0;
+        List<Course> courses = new ArrayList<>();
         String someDescription = "some course description";
         for (String courseName : COURSES) {
-            jdbcTemplate.update(INSERTING_INTO_COURSES, index, courseName, someDescription);
-            index++;
+            Course tempCourse = new Course();
+            tempCourse.setCourseDescription(someDescription);
+            tempCourse.setCourseName(courseName);
+            courses.add(tempCourse);
         }
+        courseRepository.saveAll(courses);
 
     }
 
     private void insertAssignmentationCourses() {
         List<Student> students = studentRepository.findAll();
+        List<AssigmentCourse> courseAssignments = new ArrayList<>();
         System.out.println(students.size());
-
         int coursePigmentationLimit = 600;
-        int groupRandomId = 0;
+        int groupRandomId = 1;
         int studentCoursePigmentation = 0;
         int studentCoursePigmentationLimit = 3;
-        int assignmentID = 0;
         int studentsIndexLimit = 199;
         int courseRandomId = 0;
 
         for (int i = coursePigmentationLimit, listIndex = 0;
-             i != 0 &&  listIndex <= studentsIndexLimit;) {
+             i != 0 && listIndex <= studentsIndexLimit; ) {
+            AssigmentCourse tempAssignment = new AssigmentCourse();
             int studentID = students.get(listIndex).getID();
 
 
             courseRandomId++;
-            if (courseRandomId == COURSES.length){
-                courseRandomId=0;
+            if (courseRandomId == COURSES.length) {
+                courseRandomId = 0;
             }
+            tempAssignment.setCourseID(courseRandomId);
+            tempAssignment.setGroupID(groupRandomId);
+            tempAssignment.setStudentID(studentID);
+            courseAssignments.add(tempAssignment);
 
-            jdbcTemplate.update(INSERTING_INTO_STUDENT_ASSIGNMENTATION,
-                    assignmentID, studentID, courseRandomId, groupRandomId);
-
-            assignmentID++;
             studentCoursePigmentation++;
 
             if (studentCoursePigmentation == studentCoursePigmentationLimit) {
-                groupRandomId = (int) (Math.random() * GROUPS.length);
+                groupRandomId = (int) (Math.random() * GROUPS.length)+1;
                 studentCoursePigmentation = 0;
                 listIndex++;
                 i--;
+            }
+        }
+        assignmentRepository.saveAll(courseAssignments);
+    }
+
+    private void assignGroupToStudent() {
+        List<Student> students = studentRepository.findAll();
+        for (int i = 0; i < students.size(); i++) {
+            Student student = students.get(i);
+            int studentID = student.getID();
+            var group = groupRepository.findGroupByStudentID(studentID);
+            if (group.isPresent()) {
+                Group studentGroup = group.get();
+                student.setGroupName(studentGroup.getGroupName());
+                studentRepository.save(student);
+
+            } else if (!group.isPresent()) {
+                System.out.println(i);
+                //throw new GroupNotFoundException("GroupNotFound!");
             }
         }
     }

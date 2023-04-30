@@ -2,6 +2,7 @@ package com.foxminded.university.components;
 
 import com.foxminded.university.models.AssigmentCourse;
 import com.foxminded.university.models.Course;
+import com.foxminded.university.models.Student;
 import com.foxminded.university.repositories.AssignmentRepository;
 import com.foxminded.university.repositories.CourseRepository;
 import com.foxminded.university.repositories.StudentRepository;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,13 +24,28 @@ public class StudentService {
     private AssignmentRepository assignmentRepository;
 
     @Transactional
+    public String addStudent( String studentFirstname, String studentLastname , String groupName) {
+        var student= studentRepository.findDistinctByFirstNameAndLastName(studentFirstname, studentLastname);
+        if (student.isPresent()) {
+            return student.get().toString()+" all ready exist!";
+        } else {
+            Student studentToInsert = new Student();
+            studentToInsert.setLastName(studentLastname);
+            studentToInsert.setFirstName(studentFirstname);
+            studentToInsert.setGroupName(groupName);
+            studentRepository.save(studentToInsert);
+            return "Student "+studentToInsert+" is saved" ;
+        }
+    }
+
+    @Transactional
     public void deleteStudentById(int studentID) {
         studentRepository.deleteById(Long.valueOf(studentID));
         assignmentRepository.deleteAllByStudentID(studentID);
     }
 
     @Transactional
-    public List<Course> addCourse(int studentId, int courseId) throws SQLException {
+    public List<Course> addCourse(int studentId, int courseId) {
         var student = studentRepository.findByID(studentId);
         var course = courseRepository.findByIndex(courseId);
         var assignmentCourses = assignmentRepository.findByStudentID(studentId);
