@@ -1,5 +1,6 @@
 package com.foxminded.university.components;
 
+import com.foxminded.university.exceptions.GroupNotFoundException;
 import com.foxminded.university.models.AssigmentCourse;
 import com.foxminded.university.models.Course;
 import com.foxminded.university.models.Group;
@@ -40,12 +41,9 @@ public class DataGenerator {
     private CourseRepository courseRepository;
     @Autowired
     private AssignmentRepository assignmentRepository;
-    @Autowired
-    private TablesRewriter rewriter;
 
-    @PostConstruct
+
     public void insertDataIntoTables() {
-        rewriter.createTablespace();
         insertingDataIntoStudents();
         insertAssignmentationCourses();
         insertIntoCourses();
@@ -144,8 +142,7 @@ public class DataGenerator {
                 studentRepository.save(student);
 
             } else if (!group.isPresent()) {
-                System.out.println(i);
-                //throw new GroupNotFoundException("GroupNotFound!");
+                throw new GroupNotFoundException("GroupNotFound!");
             }
         }
     }

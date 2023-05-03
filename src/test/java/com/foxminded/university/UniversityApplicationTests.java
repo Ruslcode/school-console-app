@@ -93,7 +93,7 @@ class UniversityApplicationTests {
         var varStudent = studentRepository.findByID(1);
         if (varStudent.isPresent()) {
             Student student = varStudent.get();
-            String exceptedMassage = studentService.addStudent(student.getFirstName(), student.getLastName(), student.getGroupName());
+            String exceptedMassage = studentService.addStudent(student);
             String actualMassage = student+" all ready exist!";
             Assertions.assertEquals(exceptedMassage,actualMassage);
         } else {

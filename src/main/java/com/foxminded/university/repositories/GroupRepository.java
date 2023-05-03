@@ -22,15 +22,14 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             nativeQuery = true)
     List<Group> findWithEqualOrLessStudents(@Param("student_number") int quantity);
 
-    @Query(value = "\n" +
-            "select g.group_id, g.group_name, g.student_number  from course_assignment t\n" +
-            "            left join university_groups g on g.group_id = t.group_id\n" +
-            "            left join students s on s.student_id = t.student_id\n" +
-            "            where g.group_name = (select group_name from course_assignment t\n" +
-            "            left join university_groups g on g.group_id = t.group_id \n" +
-            "            where t.student_id = ?\n" +
-            "            group by t.student_id)\n" +
-            "            group by g.group_name;", nativeQuery = true)
+    @Query(value = "select g.group_id, g.group_name, (round(count(s.student_id)/3 )) as student_number from course_assignment t\n" +
+            "                    left join university_groups g on g.group_id = t.group_id\n" +
+            "                    left join students s on s.student_id = t.student_id\n" +
+            "                    where g.group_name = (select group_name from course_assignment t\n" +
+            "                    left join university_groups g on g.group_id = t.group_id \n" +
+            "                    where t.student_id = ?\n" +
+            "                    group by group_name)\n" +
+            "                    group by g.group_name, g.group_id;", nativeQuery = true)
     
     Optional<Group> findGroupByStudentID (@Param("student_id") int studentID);
 }

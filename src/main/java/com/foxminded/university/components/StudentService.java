@@ -24,17 +24,13 @@ public class StudentService {
     private AssignmentRepository assignmentRepository;
 
     @Transactional
-    public String addStudent( String studentFirstname, String studentLastname , String groupName) {
-        var student= studentRepository.findDistinctByFirstNameAndLastName(studentFirstname, studentLastname);
-        if (student.isPresent()) {
-            return student.get().toString()+" all ready exist!";
+    public String addStudent( Student student) {
+        var existingStudent = studentRepository.findStudentByFirstNameAndLastNameLimit1(student.getFirstName(), student.getLastName());
+        if (existingStudent.isPresent()) {
+            return existingStudent.get().toString()+" all ready exist!";
         } else {
-            Student studentToInsert = new Student();
-            studentToInsert.setLastName(studentLastname);
-            studentToInsert.setFirstName(studentFirstname);
-            studentToInsert.setGroupName(groupName);
-            studentRepository.save(studentToInsert);
-            return "Student "+studentToInsert+" is saved" ;
+            studentRepository.save(student);
+            return "Student "+student+" is saved" ;
         }
     }
 

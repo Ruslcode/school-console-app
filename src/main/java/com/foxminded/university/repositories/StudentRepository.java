@@ -12,17 +12,19 @@ import java.util.Optional;
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findAllByFirstName(String firstName);
-    
-    Optional<Student> findDistinctByFirstNameAndLastName (String firstName, String  lastName);
 
-    @Query(value = "select t.student_id, first_name, last_name, g.group_name from course_assignment t\n" +
+    @Query(value = "select * from students where first_name like ? and last_name like ? limit 1;", nativeQuery = true)
+    Optional<Student> findStudentByFirstNameAndLastNameLimit1 (String firstName, String  lastName);
+
+    @Query(value = "\n" +
+            "select t.student_id, first_name, last_name, g.group_name from course_assignment t\n" +
             "left join university_groups g on g.group_id = t.group_id\n" +
             "left join students s on s.student_id = t.student_id\n" +
             "where g.group_name = (select group_name from course_assignment t\n" +
             "left join university_groups g on g.group_id = t.group_id \n" +
             "where t.student_id = ?\n" +
-            "group by t.student_id)\n" +
-            "group by t.student_id;", nativeQuery = true)
+            "group by g.group_name)\n" +
+            "group by t.student_id, g.group_name, student_id, first_name, last_name;\n", nativeQuery = true)
     List<Student> findClassMates(@Param("student_id") int studentID);
 
     Optional<Student> findByID(int ID);
